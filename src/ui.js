@@ -6,15 +6,19 @@ const fs = require("fs-extra")
 module.exports = async function generate(p = 'images', last) {
     const chalk = await (await import('chalk')).default
     let html = fs.readFileSync('src/template.html').toString()
-    let content = `<a href="/">Root</a>\n<p id="deploy-time">Latest deploy: ${new Date().toLocaleString()}</p>\n`
 
-    if (last !== undefined) {
-        content += `<div class="dir"><a href="/${last}">../</a></div>`
-    }
+    let content = ''
 
     let outputPath = p.split(path.sep)
     outputPath.splice(0, 1)
     outputPath = outputPath.join('/')
+
+    content += `<h1>/${outputPath}</h1>`
+    content += `<a target="_blank" href="${'https://github.com/zihan-ch/image/upload/main/' + p}">Upload images at this directory</a>\n`
+
+    if (last !== undefined) {
+        content += `<div class="dir"><a href="/${last}">../</a></div>\n`
+    }
 
     const outputDir = path.join('dist', outputPath)
     if (!fs.existsSync(outputDir)) {
@@ -45,6 +49,8 @@ module.exports = async function generate(p = 'images', last) {
                 generate(match, outputPath)
             }
         })
+
+        content += `<a href="/">Root</a>\n<p id="deploy-time">Latest deploy: ${new Date().toLocaleString()}</p>\n`
 
         html = html.replace('{{}}', content)
 
