@@ -14,7 +14,7 @@ module.exports = async function generate(p = 'images', last) {
     outputPath = outputPath.join('/')
 
     content += `<h1>/${outputPath}</h1>`
-    content += `<a href="/">Root</a>\n`
+    content += `<a href="/">Root</a><br />\n`
     content += `<a target="_blank" href="${'https://github.com/zihan-ch/image/upload/main/' + p}">Upload images at this directory</a>\n`
 
     if (last !== undefined) {
