@@ -2,6 +2,7 @@ const sharp = require("sharp")
 const glob = require("glob")
 const path = require("path")
 const fs = require("fs-extra")
+const ui = require('./ui')
 
 ;(async () => {
 	const chalk = await (await import("chalk")).default
@@ -50,4 +51,6 @@ const fs = require("fs-extra")
 				})
 		})
 	})
+	
+	await ui()
 })()
