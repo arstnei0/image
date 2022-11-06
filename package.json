@@ -3,7 +3,9 @@
 	"version": "1.0.0",
 	"scripts": {
 		"build": "node src/build.js",
-		"format": "prettier . -w"
+		"format": "prettier . -w",
+		"try": "pnpm build && pnpm preview",
+		"preview": "serve dist"
 	},
 	"dependencies": {
 		"chalk": "^5.1.2",
@@ -12,6 +14,7 @@
 		"sharp": "^0.31.2"
 	},
 	"devDependencies": {
-		"prettier": "^2.7.1"
+		"prettier": "^2.7.1",
+		"serve": "^14.0.1"
 	}
 }

@@ -3,10 +3,23 @@ const glob = require("glob")
 const path = require("path")
 const fs = require("fs-extra")
 
-module.exports = async function generate(p = 'images') {
+module.exports = async function generate(p = 'images', last) {
     const chalk = await (await import('chalk')).default
     let html = fs.readFileSync('src/template.html').toString()
-    let content = ''
+    let content = `<a href="/">Root</a>\n<p id="deploy-time">Latest deploy: ${new Date().toLocaleString()}</p>\n`
+
+    if (last !== undefined) {
+        content += `<div class="dir"><a href="/${last}">../</a></div>`
+    }
+
+    let outputPath = p.split(path.sep)
+    outputPath.splice(0, 1)
+    outputPath = outputPath.join('/')
+
+    const outputDir = path.join('dist', outputPath)
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true })
+    }
 
     glob(p + '/*', (err, matches) => {
         matches.forEach(match => {
@@ -14,31 +27,26 @@ module.exports = async function generate(p = 'images') {
 			imgPath.splice(0, 1)
 			imgPath = imgPath.join("/")
 
-			let outputPath = imgPath.split(".")
-			outputPath.splice(outputPath.length - 1, 1)
-			outputPath.push("webp")
-			outputPath = outputPath.join(".")
+			let short = match.split(path.sep)
+			short.splice(0, short.length - 1)
+			short = short.join("/")
+
+			let o = imgPath.split(".")
+			o.splice(o.length - 1, 1)
+			o.push("webp")
+			o = o.join(".")
 
             if (/\.(\w*)$/i.test(match)) {
-                content += `<a href="/${outputPath}">${
-                    `<p>${imgPath}</p>`
-                }<img src="/${outputPath}" width="100px"></a>\n`
+                content += `<div class="image"><a href="/${o}">${
+                    `<p>${short}</p>`
+                }<img src="/${o}" width="200px"></a></div>\n`
             } else {
-                content += `<a href="/${imgPath}">/${imgPath}</a>\n`
-                generate(match)
+                content += `<div class="dir"><a href="/${imgPath}">${short}/</a></div>\n`
+                generate(match, outputPath)
             }
         })
 
         html = html.replace('{{}}', content)
-
-        let outputPath = p.split(path.sep)
-        outputPath.splice(0, 1)
-        outputPath = outputPath.join('/')
-
-        const outputDir = path.join('dist', outputPath)
-		if (!fs.existsSync(outputDir)) {
-			fs.mkdirSync(outputDir, { recursive: true })
-		}
 
         fs.writeFileSync(
             path.join('dist', outputPath, 'index.html'),
