@@ -8,12 +8,14 @@ module.exports = async function generate(p = 'images', last) {
     let html = fs.readFileSync('src/template.html').toString()
 
     let content = ''
+    let title = ''
 
     let outputPath = p.split(path.sep)
     outputPath.splice(0, 1)
     outputPath = outputPath.join('/')
 
     content += `<h1>/${outputPath}</h1>`
+    title = `/${outputPath}`
     content += `<a href="/">Root</a><br />\n`
     content += `<a target="_blank" href="${'https://github.com/zihan-ch/image/upload/main/' + p}">Upload images at this directory</a>\n`
 
@@ -52,8 +54,10 @@ module.exports = async function generate(p = 'images', last) {
         })
 
         content += `<p id="deploy-time">Latest deploy: ${new Date().toLocaleString()}</p>\n`
+        content += `<p><a href="https://github.com/zihan-ch/image">Zihan's image host.</a></p>`
 
-        html = html.replace('{{}}', content)
+        html = html.replace('{{CONTENT}}', content)
+        html = html.replace('{{TITLE}}', title)
 
         fs.writeFileSync(
             path.join('dist', outputPath, 'index.html'),
