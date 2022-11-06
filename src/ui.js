@@ -14,6 +14,7 @@ module.exports = async function generate(p = 'images', last) {
     outputPath = outputPath.join('/')
 
     content += `<h1>/${outputPath}</h1>`
+    content += `<a href="/">Root</a>\n`
     content += `<a target="_blank" href="${'https://github.com/zihan-ch/image/upload/main/' + p}">Upload images at this directory</a>\n`
 
     if (last !== undefined) {
@@ -50,7 +51,7 @@ module.exports = async function generate(p = 'images', last) {
             }
         })
 
-        content += `<a href="/">Root</a>\n<p id="deploy-time">Latest deploy: ${new Date().toLocaleString()}</p>\n`
+        content += `<p id="deploy-time">Latest deploy: ${new Date().toLocaleString()}</p>\n`
 
         html = html.replace('{{}}', content)
 
