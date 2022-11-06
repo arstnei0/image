@@ -1,0 +1,17 @@
+{
+	"name": "images",
+	"version": "1.0.0",
+	"scripts": {
+		"build": "node src/build.js",
+		"format": "prettier . -w"
+	},
+	"dependencies": {
+		"chalk": "^5.1.2",
+		"fs-extra": "^10.1.0",
+		"glob": "^8.0.3",
+		"sharp": "^0.31.2"
+	},
+	"devDependencies": {
+		"prettier": "^2.7.1"
+	}
+}
